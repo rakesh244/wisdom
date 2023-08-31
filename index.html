@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Market</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stock Market</h1>
+    <input type="file" id="csvFile" accept=".csv" required>
+    <input type="number" id="targetValue" placeholder="Enter Target Value" required>
+    <button onclick="processCSV()">Process CSV</button>
+
+    <div id="output"></div>
+
+    <script>
+        function processCSV() {
+            const fileInput = document.getElementById('csvFile');
+            const targetValueInput = document.getElementById('targetValue');
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // Clear previous output
+
+            const file = fileInput.files[0];
+            const targetValue = parseFloat(targetValueInput.value);
+
+            if (file && !isNaN(targetValue)) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const contents = event.target.result;
+                    const lines = contents.split('\n');
+
+                    for (let i = 0; i < lines.length; i++) {
+                        const fields = lines[i].split(',');
+                        if (fields[5] <targetValue) {
+                            const extractedField = fields[5];
+                            const extracted = fields[1];
+                            const paragraph = document.createElement('p');
+                            //const para = document.createElement('pp');
+
+                           // para.textContent = `Extracted Field: ${extracted}`;
+                            paragraph.textContent = `${extracted},${extractedField}`;
+                            //outputDiv.appendChild(para);
+                            outputDiv.appendChild(paragraph);
+                        }
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+    </script>
+</body>
+</html>
